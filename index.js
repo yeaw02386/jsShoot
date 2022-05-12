@@ -5,7 +5,7 @@ const c = canvas.getContext('2d')
 canvas.height = innerHeight-5
 canvas.width = innerWidth
 
-const scoreDis = document.querySelector('#score')
+const powerDisplay = document.querySelector('#power')
 const restart = document.querySelector('#restart')
 const restartPage = document.getElementById('restart-page')
 
@@ -104,9 +104,9 @@ class Particle{
     }
 }
 
-
+let spawnEnemy
 function spawn(){
-    setInterval(() => {
+    spawnEnemy = setInterval(() => {
         const r = Math.random() * (30-15)+20
         let x 
         let y
@@ -130,13 +130,40 @@ function spawn(){
     },1000)
 }
 
+function gameOver(){
+    setTimeout(()=>{
+        restartPage.style.display = "flex"
+        restart.innerHTML = "Restart Game"
+        document.querySelector("#t-over")
+                .innerHTML = "Game Over"
+        powerDisplay.innerHTML = 0
+
+        cancelAnimationFrame(animationId)
+        clearInterval(spawnEnemy)
+        clearInterval(shoot)
+    },0)
+}
+
+function createParticle(px,py,r,c){
+    for(let i = 1;i <=r;i++){
+        particles.push(new Particle(
+            px,py,Math.random()*3,c,
+            {x:(Math.random()-0.5)*(Math.random()*8),
+            y:(Math.random()-0.5)*(Math.random()*8)}
+        ))
+    }
+}
+
 let animationId
-let score = 0
+let power = 100
 function animate(){
     animationId = requestAnimationFrame(animate)
     c.fillStyle = 'rgba(0, 0, 0,0.1)'
+    powerDisplay.innerHTML = power
+    if (power <= 0){gameOver()}
     c.fillRect(0,0,canvas.width,canvas.height)
     player.draw()
+
     particles.forEach((particle,index)=>{
         if (particle.alpha <= 0){
             particles.splice(index,1)
@@ -148,7 +175,6 @@ function animate(){
 
     projectiles.forEach((ext,index) => {
         ext.update()
-
         if (ext.x + ext.r < 0 ||
             ext.x - ext.r > canvas.width ||
             ext.y + ext.r < 0 ||
@@ -164,17 +190,15 @@ function animate(){
         enemy.update()
         const dis = Math.hypot(enemy.x - player.x,
             enemy.y - player.y) - enemy.r - player.r
-        
-        //game over    
+    
+        //when enemy collision on player
         if (dis < 1){
+            power -= parseInt(enemy.r) 
             setTimeout(()=>{
-                restartPage.style.display = "flex"
-                restart.innerHTML = "Restart Game"
-                document.querySelector("#t-over")
-                .innerHTML = "Game Over"
-                cancelAnimationFrame(animationId)
-               
+                enemies.splice(eIndex,1)
             })
+            createParticle(enemy.x,enemy.y,enemy.r,enemy.co)
+
         }
 
         //when bullet collision on enemy
@@ -183,16 +207,10 @@ function animate(){
                 bullet.y - enemy.y) - enemy.r - bullet.r
             
             if (dis < 1 ){
-                score += 10
-                scoreDis.innerHTML = score
+                setTimeout(()=>{power += 5},200)
+                
+                createParticle(bullet.x,bullet.y,enemy.r,enemy.co)
 
-                for(let i = 1;i <=enemy.r;i++){
-                    particles.push(new Particle(
-                        bullet.x,bullet.y,Math.random()*3,enemy.co,
-                        {x:(Math.random()-0.5)*(Math.random()*8),
-                        y:(Math.random()-0.5)*(Math.random()*8)}
-                    ))
-                }
                 if (enemy.r -15 > 15){
                     gsap.to(enemy,{
                         "r":enemy.r-15
@@ -201,7 +219,7 @@ function animate(){
                         projectiles.splice(bIndex,1)
                     },0)
                 }else{
-                    score += 20
+                    power += 20
                     setTimeout(()=>{
                         enemies.splice(eIndex,1)
                         projectiles.splice(bIndex,1)
@@ -213,9 +231,9 @@ function animate(){
 }
 
 function init(){
-     animationId
-     score = 0
-     projectiles = []
+    power = 100
+    powerDisplay.innerHTML = power
+    projectiles = []
     enemies = []
     particles = []
     x = canvas.width / 2
@@ -243,7 +261,9 @@ canvas.addEventListener("mousedown",(Event) =>
             
             projectiles.push(new Projectile(canvas.width/2,canvas.height/2,
             5,'white',{x:Math.cos(angle)*4,y:Math.sin(angle)*5}))
+            power -= 2
     },100)
+    
 })
 
 canvas.addEventListener("mouseup",()=>{
@@ -256,11 +276,8 @@ canvas.addEventListener("mousemove",(Event)=>{
 })
 
 restart.addEventListener("click",()=>{
-    
-    clearInterval(shoot)
     init()
     animate()
     spawn()
     restartPage.style.display = "none"
-    scoreDis.innerHTML = 0
 })
