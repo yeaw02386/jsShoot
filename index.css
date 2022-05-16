@@ -1,0 +1,59 @@
+*{
+    font-family:SOV_monomon;
+
+}
+button{
+    border-radius:5px;
+    background-color:rgb(235, 120, 120);
+    font-size: medium;
+    border-style:none;
+    width:10rem;
+    height:2rem;
+    user-select: none;
+}
+body{
+    margin : 0;
+    overflow :hidden;
+    
+}
+.ui{
+    background-color:rgba(0, 0, 0, 0);
+    color:white;
+    font-size:20px;
+    position:absolute;
+    display:flex;
+    user-select: none;
+}
+.power{
+    margin-top: 0.25rem;
+    margin-left:0.25rem;
+}
+.wave{
+    margin-top: 0.25rem;
+    margin-left:20rem;
+}
+.wave-end{
+    margin-top:0.25rem;
+    margin-left:50rem;
+}
+.contraner{
+    
+    backdrop-filter: blur(10px);
+    position:fixed;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    display:flex;
+    align-items: center;
+    justify-content: center; 
+}
+.bg-popup{
+    border-radius:15px;
+    background-color:rgb(255, 255, 255);
+    max-width: 20rem;
+    width: 100%;
+    padding: 1.5rem;
+    text-align:center;
+    
+}

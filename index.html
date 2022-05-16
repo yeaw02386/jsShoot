@@ -5,76 +5,60 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Indext</title>
-
-    
+    <link rel="stylesheet" href="index.css">
 </head>
+
 <body>  
 </body>
-<style>
-    *{
-        font-family:SOV_monomon;
-        border-radius:15px;
-    }
-    button{
-        border-radius:5px;
-    }
-    body{
-        margin : 0;
-        background-color:black;
-        
-    }
-    .score{
-        background-color:black;
-        color:white;
-        font-size:20px;
-        margin-top: 0.25rem;
-        margin-left:0.25rem;
-        position:fixed;
-        display:flex;
-        user-select: none;
-    }
-    .contraner{
-        position:fixed;
-        top: 0px;
-        right: 0px;
-        bottom: 0px;
-        left: 0px;
-        display:flex;
-        align-items: center;
-        justify-content: center; 
-    }
-    .bg-game-over{
-        background-color:rgb(255, 255, 255);
-        max-width: 20rem;
-        width: 100%;
-        padding: 1.5rem;
-        text-align:center;
-        
-    }
-    #restart{
-       background-color:rgb(235, 120, 120);
-       font-size: medium;
-       border-style:none;
-       width:10rem;
-       height:2rem;
-       user-select: none;
-    }
-</style>
 
 
-<div class="score"><span>Score : </span><span id="score">0</span></div>
 <div class="contraner" id="restart-page">
-    <div class="bg-game-over">
-        <h1 id ="t-over">Welcome</h1>
+    <div class="bg-popup">
+        <h1>Game Over</h1>
         <div>
             <button id="restart">Start Game</button>
         </div>
     </div>
 </div>
 
-<canvas></canvas>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"></script>
+<div class="contraner" id="next-wave-page">
+    <div class="bg-popup">
+        <h1>Wave Cleared</h1>
+        <button id="next-wave">Next wave</button>
+    </div>
+</div>
 
+<div class="contraner" id="start-game-page" style="background-color:black">
+    <div class="bg-popup">
+        <h1>Welcome</h1>
+        <div>
+            <button id="start-game">Start Game</button>
+        </div>
+    </div>
+</div>
+
+
+<div class="ui">
+    <div class ="power">
+        <span>Power : </span>
+        <span id="power">100</span>
+    </div>
+</div>
+<div class="ui">
+    <div class="wave">
+        <span>Wave :</span>
+        <span id="wave">1</span>
+    </div>
+</div>
+<div class="ui">
+    <div class="wave-end">
+        <span id="wave-end">0 : 0</span>
+    </div>
+</div>
+
+<canvas></canvas>
 
 <script src="index.js"></script>
+<script src="entry.js"></script>
+
 </html>
